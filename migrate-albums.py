@@ -10,7 +10,7 @@ ADD_PHOTO_TO_ALBUM_SCRIPT = """
     on unixDate(datetime)
         set command to "date -j -f '%A, %B %e, %Y at %I:%M:%S %p' '" & datetime & "'"
         set command to command & " +%s"
-        
+
         set theUnixDate to do shell script command
         return theUnixDate
     end unixDate
@@ -19,12 +19,12 @@ ADD_PHOTO_TO_ALBUM_SCRIPT = """
             if not (exists album named albumName) then
                 make new album named albumName
             end if
-            
+
             set images to search for image_filename
             repeat with img in images
                 set myFilename to filename of img
                 set myTimestamp to my unixDate(get date of img)
-                set mySize to size of img                
+                set mySize to size of img
                 if image_filename is equal to myFilename and mySize is equal to (image_size as integer)
                     if image_timestamp is equal to "" or image_timestamp is equal to myTimestamp
                         set imgList to {img}
@@ -45,7 +45,7 @@ ADD_PHOTO_SCRIPT = """
     on unixDate(datetime)
         set command to "date -j -f '%A, %B %e, %Y at %I:%M:%S %p' '" & datetime & "'"
         set command to command & " +%s"
-        
+
         set theUnixDate to do shell script command
         return theUnixDate
     end unixDate
@@ -55,7 +55,7 @@ ADD_PHOTO_SCRIPT = """
             repeat with img in images
                 set myFilename to filename of img
                 set myTimestamp to my unixDate(get date of img)
-                set mySize to size of img                
+                set mySize to size of img
                 if image_filename is equal to myFilename and mySize is equal to (image_size as integer)
                     if image_timestamp is equal to "" or image_timestamp is equal to myTimestamp
                         return (get id of img)
@@ -114,7 +114,7 @@ def album_metadata(directory):
 def album_photos(directory):
     for path, dirs, files in os.walk(directory):
         for f in files:
-            if not f.endswith(".json"):
+            if not f.startswith(".") and not f.endswith(".json"):
                 yield [os.path.join(path, f), f]
 
 
@@ -139,7 +139,7 @@ def add_photo(image_path, image_filename, taken_ts):
 def photos(directory):
     for path, dirs, files in os.walk(directory):
         for f in files:
-            if not f.endswith(".json"):
+            if not f.startswith(".") and not f.endswith(".json"):
                 yield [path, f]
 
 
